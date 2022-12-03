@@ -1,7 +1,7 @@
 const stat = document.getElementById('status');
 const player = document.getElementById('player');
 let currStat = 'red';
-let currPlayer = 'red';
+let currPlayer = '';
 let cookie = '';
 
 function updateRoomList() {
@@ -124,10 +124,9 @@ fetch('/getcookie').then((response) => {
   if (!response.ok) console.log('Request failed');
   else
     response.json().then((data) => {
-      document.cookie = data.cookie;
+      currPlayer = data.cookie;
     });
 });
-
 
 //poll server every 5 seconds
 setInterval(updateGame(), 5000);
