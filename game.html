@@ -3,16 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="style.css" />
-    <script defer src="index.js"></script>
   </head>
   <body>
     <header>Connect 4</header>
     <section class="container">
+
+      <nav>
+        <ul>
+          <li>
+            <a href="game.html">Home</a>
+          </li>
+          <li>
+            <a href="credits.html">Credits</a>
+          </li>
+        </ul>
+      </nav>
       
-      <section class="content">
+      <section id="gamescreen">
 
         <div>
-            <p>Current Status</p>
             <p id="player"></p>
             <p id="status"></p>
         </div>
@@ -83,17 +92,23 @@
                 <td id="6x3"></td>
                 <td id="6x4"></td>
                 <td id="6x5"></td>
-                <td id="6x6" class="black"></td>
-                <td id="6x7" class="red"></td>
+                <td id="6x6" class="red"></td>
+                <td id="6x7" class="black"></td>
               </tr>
             </tbody>
             </table>
 
             <div id="help">
-              <p>When it's your turn, click on a column to place a piece of your color there.</p>
-              <p>The first player to get four pieces of their color in a line horizontally, vertically, or diagonally wins.</p>
+              <p>
+                When it's your turn, click on a column to place a piece of your color there.
+              </p>
+              <p>
+                The first player to get four pieces of their color in a line horizontally, vertically, or diagonally wins.
+              </p>
             </div>
       </section>
     </section>
   </body>
+
+  <script defer src="index.js"></script>
 </html>
