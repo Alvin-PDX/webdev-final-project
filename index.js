@@ -104,10 +104,9 @@ function requestGameUpdate() {
 //Update the onscreen gameboard according to a new game state
 function updateGame(game) {
 
-  board = game.state;
+  exec('board = ' + game.state);
 
   let rowNum = 1;
-  
   for (const row of board) {
     let colNum = 1;
     for (const col of row) {
