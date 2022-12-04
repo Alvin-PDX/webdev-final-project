@@ -1,9 +1,11 @@
 const stat = document.getElementById('status');
 const player = document.getElementById('player');
-let currStat = 'red';
+let currStat = '';
 let currPlayer = '';
-let cookie = '';
+let currID = 0;
+//let cookie = '';
 
+/*
 function updateRoomList() {
 
   fetch('/roomlist').then((res) => {
@@ -28,65 +30,184 @@ function updateRoomList() {
   });
 }
 
+
 function joinRoom(roomName) {
   window.location.href = `/${roomName}`;
 }
 
+
+
 function leaveRoom() {}
 
-function updateGame() {
+*/
 
-  fetch('updateGame').then((res) => {
-    let rowNum = 1;
-    let colNum = 1;
-
-    for (const row of res.board) {
-      for (const col of row) {
-        let space = document.getElementById(
-          String(rowNum) + 'x' + String(colNum)
-        );
-        space.classList.remove('red', 'black');
-
-        if (col == 1) {
-          space.classList.add('black');
-        } else if (col == 2) {
-          space.classList.add('red');
-        }
-        colNum += 1;
-      }
-      rowNum += 1;
-    }
-
-    player.innerHTML = 'Playing as ' + res.player;
-    stat.innerHTML = 'Current Status: ' + res.status;
-    currStat = res.status;
-    currPlayer = res.player;
-  });
+//requests an updated game state from the server
+function requestGameUpdate() {
+  fetch(`/api/Game/1`)
+    .then((response) => {
+      response.json();
+    })
+    .then((data) => {
+      currID = data.id;
+      updateGame(data);
+    })
+    .catch((error) => {
+      console.error('Something went wrong when requesting a game update: ', error);
+    });
 }
 
+//Update the onscreen gameboard according to a new game state
+function updateGame(game) {
+
+  board = game.state;
+
+  let rowNum = 1;
+  
+  for (const row of board) {
+    let colNum = 1;
+    for (const col of row) {
+      let space = document.getElementById(
+        String(rowNum) + 'x' + String(colNum)
+      );
+      space.classList.remove('red', 'black');
+
+      if (col === 'black') {
+        space.classList.add('black');
+      } else if (col === 'red') {
+        space.classList.add('red');
+      }
+      colNum += 1;
+    }
+    rowNum += 1;
+  }
+
+  
+  statusUpdate(game);
+}
+
+//Change the status field whenever a status update occurs
+function statusUpdate(game) {
+
+  let stat = 'notStarted';
+
+  if (game.isGameOver) {
+    stat = 'gameEnded';
+  }
+
+  if (game.isPlayer1Turn) {
+    stat = 'red';
+  }
+
+  if (game.isPlayer2Turn) {
+    stat = 'black';
+  }
+
+  if (game.isPlayer1Winner) {
+    stat = 'redWin';
+  }
+  
+  if (game.isPlayer2Winner) {
+    stat = 'blackWin';
+  }
+
+  currStat = stat;
+
+  if (stat === 'notStarted') {
+    statElem.innerHTML = `Waiting to start...`;
+    statElem.className = '';
+    statElem.classList.add('notStarted');
+  } else if (stat === 'red') {
+    statElem.innerHTML = `It's the Red player's turn.`;
+    statElem.className = '';
+    statElem.classList.add('redTurn');
+  } else if (stat === 'black') {
+    statElem.innerHTML = `It's the Black player's turn.`;
+    statElem.className = '';
+    statElem.classList.add('blackTurn');
+  } else if (stat === 'redWin') {
+    statElem.innerHTML = `The Red player wins!`;
+    statElem.className = '';
+    statElem.classList.add('redWin');
+    clearInterval(poll);
+
+    //delete game
+    if (currPlayer === 'black') {
+      fetch(`/api/Game/1`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'text/plain',
+        }
+      })
+        .then((response) => {
+          response.json();
+        })
+        .then((data) => {
+          updateGame(data);
+        })
+        .catch((error) => {
+          console.error('Something went wrong when deleting a game: ', error);
+        });
+    }
+  } else if (stat === 'blackWin') {
+    statElem.innerHTML = `The Black player wins!`;
+    statElem.className = '';
+    statElem.classList.add('blackWin');
+    clearInterval(poll);
+
+    //delete game
+    if (currPlayer === 'red') {
+      fetch(`/api/Game/1`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'text/plain',
+        }
+      })
+        .then((response) => {
+          response.json();
+        })
+        .then((data) => {
+          updateGame(data);
+        })
+        .catch((error) => {
+          console.error('Something went wrong when deleting a game: ', error);
+        });
+    }
+  } else if (stat === 'gameEnded') {
+    statElem.innerHTML = `The game ended.`;
+    statElem.className = '';
+    statElem.classList.add('disconnect');
+    clearInterval(poll);
+  } else if (stat === 'draw') {
+    statElem.innerHTML = `The game ended in a draw!`;
+    statElem.className = '';
+    statElem.classList.add('draw');
+    clearInterval(poll);
+  }
+}
+
+//send a new move to the server
 function sendMove(column) {
-  console.log('placing piece at ' + String(column));
-  data = {
-    move: column,
-  };
-  fetch('move', {
-    method: 'POST',
+
+ 
+
+  fetch(`/api/Game/Play/${currPlayer}/Column/${column}?id=1`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(column),
+    }
   })
     .then((response) => {
       response.json();
     })
     .then((data) => {
-      updateGame();
+      updateGame(data);
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.error('Something went wrong when sending a move: ', error);
     });
 }
 
+//event listeners for board interaction
 let spaces = document.querySelectorAll('td');
 spaces.forEach(function (elem) {
   elem.addEventListener('mouseover', function () {
@@ -112,6 +233,8 @@ spaces.forEach(function (elem) {
   });
 });
 
+
+/*
 fetch('https://connect4-api.azurewebsites.net/api/Lobbies/PostLobby', {
   method: 'POST',
   headers: {
@@ -128,5 +251,7 @@ fetch('/getcookie').then((response) => {
     });
 });
 
+*/
+
 //poll server every 5 seconds
-setInterval(updateGame(), 5000);
+let poll = setInterval(requestGameUpdate(), 5000);
