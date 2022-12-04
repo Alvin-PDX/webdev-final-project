@@ -24,7 +24,7 @@ fetch(`${url}/api/Game/Play/StartGame`, {
     assignPlayer(data.playerType);
     updateGame(data);
     //poll server every 5 seconds
-    poll = setInterval(requestGameUpdate(), 5000);
+    poll = setInterval(requestGameUpdate, 5000);
   })
   .catch((error) => {
     console.error('Something went wrong when joining the game: ', error);
