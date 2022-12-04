@@ -233,7 +233,8 @@ function statusUpdate(game) {
 //send a new move to the server
 function sendMove(column) {
 
- 
+  dataColumn = parseInt(column);
+  dataColumn -= 1;
 
   fetch(`${url}/api/Game/Play/${currPlayer}/Column/${column}?id=${currID}`, {
     method: 'PUT',
