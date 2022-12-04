@@ -4,9 +4,50 @@ const url = '';
 
 const stat = document.getElementById('status');
 const player = document.getElementById('player');
+
 let currStat = '';
 let currPlayer = 'none';
 let currID = 0;
+let poll = -1;
+
+//try to join room
+fetch(`${url}/api/Game/Play/StartGame/1`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'text/plain',
+  }
+})
+  .then((response) => {
+    response.json();
+  })
+  .then((data) => {
+    assignPlayer(data.playerType);
+    updateGame(data);
+    //poll server every 5 seconds
+    poll = setInterval(requestGameUpdate(), 5000);
+  })
+  .catch((error) => {
+    console.error('Something went wrong when joining the game: ', error);
+  });
+
+//assign player type
+function assignPlayer(playerType) {
+
+  currPlayer = playerType;
+  player.className = '';
+  player.classList.add(playerType);
+
+  if (playerType === 'red') {
+    player.innerHTML = `You are playing as Red.`;
+  }
+  if (playerType === 'black') {
+    player.innerHTML = `You are playing as Black.`;
+  }
+  if (playerType === 'spectator') {
+    player.innerHTML = `You are spectating this match.`;
+  }
+}
+
 //let cookie = '';
 
 /*
@@ -257,5 +298,4 @@ fetch('/getcookie').then((response) => {
 
 */
 
-//poll server every 5 seconds
-let poll = setInterval(requestGameUpdate(), 5000);
+

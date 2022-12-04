@@ -192,6 +192,11 @@ h2 {
   color: white;
 }
 
+.spectator {
+  background-color: gray;
+  color: white;
+}
+
 .redTurn {
   background-color: red;
   color: white;
