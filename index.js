@@ -1,6 +1,6 @@
 //set URL here
 //eg: http://localhost:5000
-const url = '';
+const url = 'https://connect4-api.azurewebsites.net';
 
 const stat = document.getElementById('status');
 const player = document.getElementById('player');
@@ -17,9 +17,9 @@ fetch(`${url}/api/Game/Play/StartGame/${currID}`, {
     'Content-Type': 'text/plain',
   }
 })
-  .then((response) => {
-    response.json();
-  })
+  .then((response) => 
+    response.json()
+  )
   .then((data) => {
     assignPlayer(data.playerType);
     updateGame(data);
@@ -89,9 +89,9 @@ function leaveRoom() {}
 //requests an updated game state from the server
 function requestGameUpdate() {
   fetch(`${url}/api/Game/${currID}`)
-    .then((response) => {
-      response.json();
-    })
+    .then((response) => 
+      response.json()
+    )
     .then((data) => {
       currID = data.id;
       updateGame(data);
@@ -183,9 +183,9 @@ function statusUpdate(game) {
           'Content-Type': 'text/plain',
         }
       })
-        .then((response) => {
-          response.json();
-        })
+        .then((response) => 
+          response.json()
+        )
         .then((data) => {
           updateGame(data);
         })
@@ -207,9 +207,9 @@ function statusUpdate(game) {
           'Content-Type': 'text/plain',
         }
       })
-        .then((response) => {
-          response.json();
-        })
+        .then((response) => 
+          response.json()
+        )
         .then((data) => {
           updateGame(data);
         })
@@ -242,9 +242,9 @@ function sendMove(column) {
       'Content-Type': 'application/json',
     }
   })
-    .then((response) => {
-      response.json();
-    })
+    .then((response) => 
+      response.json()
+    )
     .then((data) => {
       updateGame(data);
     })
