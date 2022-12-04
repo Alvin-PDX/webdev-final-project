@@ -1,6 +1,7 @@
 # Final Project for Full Stack Web Development - Connect Four
 
 Johnny Nguyen - Backend Developer
+
 Alvin Iskender - Frontend Developer
 
 ## How to Run
