@@ -4,8 +4,14 @@ public class Game
 {
     public long Id { get; set; } = 0;
 
+    public bool isStartGame { get; set; } = false;
+
     public bool isGameOver { get; set; } = false;
 
+    public string playerType { get; set; } = "";
+
+    public bool isSpectatorOnly { get; set; } = false;
+ 
     public bool isInvalidMove { get; set; } = false;
 
     public bool isPlayer1Turn { get; set; } = false;
