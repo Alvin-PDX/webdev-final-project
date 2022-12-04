@@ -100,6 +100,10 @@ nav li a {
   background: rgb(35, 79, 188);
 }
 
+#help {
+  padding-top: 10px;
+}
+
 .container {
   width: 60%;
   background-color: #79bbd4;
