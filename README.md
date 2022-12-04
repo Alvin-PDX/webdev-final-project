@@ -4,6 +4,8 @@ Johnny Nguyen - Backend Developer
 
 Alvin Iskender - Frontend Developer
 
+
+
 ## How to Run
 
 
@@ -12,6 +14,8 @@ Alvin Iskender - Frontend Developer
 On frontend/index.js, be sure to edit the url constant at the top to the name of the server host.
 
     const url = '<yourhostnamehere>';
+    
+## Frameworks used
 
 ## Outside Resources
 
