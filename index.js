@@ -35,7 +35,7 @@ function assignPlayer(playerType) {
 
   currPlayer = playerType;
   player.className = '';
-  player.classList.add(playerType);
+  player.classList.add(playerType + 'player');
 
   if (playerType === 'red') {
     player.innerHTML = `You are playing as Red.`;
