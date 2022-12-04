@@ -1,7 +1,11 @@
+//set URL here
+//eg: http://localhost:5000
+const url = '';
+
 const stat = document.getElementById('status');
 const player = document.getElementById('player');
 let currStat = '';
-let currPlayer = '';
+let currPlayer = 'none';
 let currID = 0;
 //let cookie = '';
 
@@ -43,7 +47,7 @@ function leaveRoom() {}
 
 //requests an updated game state from the server
 function requestGameUpdate() {
-  fetch(`/api/Game/1`)
+  fetch(`${url}/api/Game/1`)
     .then((response) => {
       response.json();
     })
@@ -132,7 +136,7 @@ function statusUpdate(game) {
 
     //delete game
     if (currPlayer === 'black') {
-      fetch(`/api/Game/1`, {
+      fetch(`${url}/api/Game/1`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'text/plain',
@@ -156,7 +160,7 @@ function statusUpdate(game) {
 
     //delete game
     if (currPlayer === 'red') {
-      fetch(`/api/Game/1`, {
+      fetch(`${url}/api/Game/1`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'text/plain',
@@ -190,7 +194,7 @@ function sendMove(column) {
 
  
 
-  fetch(`/api/Game/Play/${currPlayer}/Column/${column}?id=1`, {
+  fetch(`${url}/api/Game/Play/${currPlayer}/Column/${column}?id=1`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
