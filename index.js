@@ -235,7 +235,7 @@ function sendMove(column) {
   dataColumn = parseInt(column);
   dataColumn -= 1;
 
-  fromPlay = currPlayer.charAt(0).toUpperCase() + string.slice(1);
+  fromPlay = currPlayer.charAt(0).toUpperCase() + currPlayer.slice(1);
 
   fetch(`${url}/api/Game/Play/${fromPlay}/Column/${dataColumn}?id=${currID}`, {
     method: 'PUT',
