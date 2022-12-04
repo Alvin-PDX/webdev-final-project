@@ -17,10 +17,12 @@ namespace Connect4_API.Controllers
     public class GamesController : ControllerBase
     {
         private readonly GameContext _context;
+        private readonly PlayerContext _playerContext;
 
-        public GamesController(GameContext context)
+        public GamesController(GameContext context, PlayerContext playerContext)
         {
             _context = context;
+            _playerContext = playerContext;
         }
 
         // GET: api/Games
@@ -134,7 +136,6 @@ namespace Connect4_API.Controllers
 
             return CreatedAtAction(nameof(GetGame), new { id = dbEntry.Id }, dbEntry);
         }
-
 
         // PUT: api/Play/Black/Column/{columnId}
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -256,15 +257,27 @@ namespace Connect4_API.Controllers
         [HttpPut("Play/ResetGame/{id}")]
         public async Task<ActionResult<Game>> PutResetGame(long id)
         {
-          if (_context.Game == null)
-          {
-              return Problem("Entity set 'GameContext.Game'  is null.");
-          }
+            if (_context.Game == null)
+            {
+                return Problem("Entity set 'GameContext.Game'  is null.");
+            }
+
+            long redId = 1;
+            var player1 = await _playerContext.Player.FindAsync(redId);
+
+            long blackId = 2;
+            var player2 = await _playerContext.Player.FindAsync(blackId);
+
+            if(player1 == null || player2 == null)
+            {
+                return Problem("Error. Unable to reset game. Not a full lobby.");
+            }
 
             Game game = new Game();
             game.Id = id;
+            game.isStartGame = true;
             game.isPlayer1Turn = true;
-
+            game.isSpectatorOnly= true;
 
             _context.Entry(game).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -282,15 +295,95 @@ namespace Connect4_API.Controllers
               return Problem("Entity set 'GameContext.Game'  is null.");
           }
 
-            Game game = new Game();
-            game.isPlayer1Turn = true;
+            // DEBUG
+            long redId = 1;
+            var player1 = await _playerContext.Player.FindAsync(redId);
 
-            convertStringTo2DArray(game.State);
+            long blackId = 2;
+            var player2 = await _playerContext.Player.FindAsync(blackId);
 
-            _context.Game.Add(game);
-            await _context.SaveChangesAsync();
+            // Check if player 1 is in the room. if not, then create player 1
+            if(player1 == null)
+            {
+                var redPlayer = new Player();
+                redPlayer.Id = redId;
+                redPlayer.PlayerColor = "red";
 
-            return CreatedAtAction(nameof(GetGame), new { id = game.Id }, game);
+                _playerContext.Player.Add(redPlayer);
+                await _playerContext.SaveChangesAsync();
+
+                Game game = new Game();
+
+                long roomId = 1;
+                game.Id = roomId;
+                game.isPlayer1Turn = true;
+                // Switch the isStartGame to true if player 1 and 2 are in the lobby
+                if(player1 != null && player2 != null)
+                {
+                    game.isStartGame = true;     
+                }
+
+                convertStringTo2DArray(game.State);
+                
+                _context.Game.Add(game);
+                await _context.SaveChangesAsync();
+
+                game.playerType = "red";
+                return CreatedAtAction(nameof(GetGame), new { id = game.Id }, game);
+
+            } 
+
+            // Check if player 1 is in the room. if yes, then create player 2
+            else if(player2 == null)
+            {
+                var blackPlayer = new Player();
+                blackPlayer.Id = blackId;
+                blackPlayer.PlayerColor = "black";
+
+                _playerContext.Player.Add(blackPlayer);
+                await _playerContext.SaveChangesAsync();
+
+                long roomId = 1; 
+                var game = await _context.Game.FindAsync(roomId);
+                game.isStartGame = true;     
+                game.isSpectatorOnly = true;
+                await _context.SaveChangesAsync();
+                game.playerType = "black";
+
+                return CreatedAtAction(nameof(GetGame), new { id = game.Id }, game);
+            }
+
+            // Create isSpectator
+            else if(player1 != null && player2 != null)
+            {
+                long id = 0;
+                var spectatorPlayer = new Player();
+                spectatorPlayer.Id = id;
+
+                spectatorPlayer.PlayerColor = "spectator";
+                _playerContext.Player.Add(spectatorPlayer);
+                await _playerContext.SaveChangesAsync();
+
+                long roomId = 1; 
+                var game = await _context.Game.FindAsync(roomId);
+
+                game.isSpectatorOnly = true;
+                await _context.SaveChangesAsync();
+
+                game.playerType = "spectator";
+
+                return CreatedAtAction(nameof(GetGame), new { id = game.Id }, game);
+            }
+
+            long Id = 1;
+            var room = await _context.Game.FindAsync(Id);
+
+            if(room == null)
+            {
+                return NotFound();
+            }
+
+            return room;
         }
 
         // POST: api/Games
@@ -312,15 +405,24 @@ namespace Connect4_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGame(long id)
         {
-            if (_context.Game == null)
+            if (_context.Game == null || _playerContext == null)
             {
                 return NotFound();
             }
+
             var game = await _context.Game.FindAsync(id);
             if (game == null)
             {
                 return NotFound();
             }
+
+
+            foreach(var player in _playerContext.Player)
+            {
+                _playerContext.Player.Remove(player);
+            }
+
+            await _playerContext.SaveChangesAsync();
 
             _context.Game.Remove(game);
             await _context.SaveChangesAsync();

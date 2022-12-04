@@ -134,7 +134,6 @@ namespace Connect4_API.Controllers
           }
             player.Id = 1;
             player.PlayerColor = "red";
-            player.isTurn = false;
 
             _context.Player.Add(player);
             await _context.SaveChangesAsync();
@@ -153,7 +152,6 @@ namespace Connect4_API.Controllers
           }
             player.Id = 2;
             player.PlayerColor = "black";
-            player.isTurn = false;
 
             _context.Player.Add(player);
             await _context.SaveChangesAsync();
@@ -179,7 +177,6 @@ namespace Connect4_API.Controllers
             }
 
             player.PlayerColor = "spectator";
-            player.isTurn = false;
 
             _context.Player.Add(player);
             await _context.SaveChangesAsync();

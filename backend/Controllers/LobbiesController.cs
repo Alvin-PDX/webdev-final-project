@@ -38,8 +38,6 @@ namespace Connect4_API.Controllers
           return await _context.Lobby.ToListAsync();
         }
 
-
-
         // GET: api/Lobbies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Lobby>> GetLobby(int id)
@@ -87,7 +85,6 @@ namespace Connect4_API.Controllers
             return CreatedAtAction("GetLobby", new { id = lobby.Id }, lobby);
         }
 
-
         // DELETE: api/Lobbies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLobby(int id)
@@ -113,9 +110,6 @@ namespace Connect4_API.Controllers
             return (_context.Lobby?.Any(e => e.Id == id)).GetValueOrDefault();
         }
         
-
-
-
     }
 
     
