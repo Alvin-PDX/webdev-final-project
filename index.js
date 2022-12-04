@@ -2,7 +2,7 @@
 //eg: http://localhost:5000
 const url = 'https://connect4-api.azurewebsites.net';
 
-const stat = document.getElementById('status');
+const statElem = document.getElementById('status');
 const player = document.getElementById('player');
 
 let currStat = '';
@@ -11,7 +11,7 @@ let currID = 1;
 let poll = -1;
 
 //try to join room
-fetch(`${url}/api/Game/Play/StartGame/${currID}`, {
+fetch(`${url}/api/Game/Play/StartGame`, {
   method: 'POST',
   headers: {
     'Content-Type': 'text/plain',
@@ -104,7 +104,7 @@ function requestGameUpdate() {
 //Update the onscreen gameboard according to a new game state
 function updateGame(game) {
 
-  exec('board = ' + game.state);
+  eval('board = ' + game.state);
 
   let rowNum = 1;
   for (const row of board) {
