@@ -115,9 +115,9 @@ function updateGame(game) {
       );
       space.classList.remove('red', 'black');
 
-      if (col === 'black') {
+      if (col === 2) {
         space.classList.add('black');
-      } else if (col === 'red') {
+      } else if (col === 1) {
         space.classList.add('red');
       }
       colNum += 1;
