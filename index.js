@@ -176,8 +176,8 @@ function statusUpdate(game) {
 
     //reset game
     if (currPlayer === 'black') {
-      fetch(`${url}/api/Game/Play/ResetGame/${currID}`, {
-        method: 'PUT',
+      fetch(`${url}/api/Game/${currID}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'text/plain',
         }
@@ -200,8 +200,8 @@ function statusUpdate(game) {
 
     //reset game
     if (currPlayer === 'red') {
-      fetch(`${url}/api/Game/Play/ResetGame/${currID}`, {
-        method: 'PUT',
+      fetch(`${url}/api/Game/${currID}`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'text/plain',
         }
