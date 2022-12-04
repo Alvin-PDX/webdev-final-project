@@ -7,11 +7,11 @@ const player = document.getElementById('player');
 
 let currStat = '';
 let currPlayer = 'none';
-let currID = 0;
+let currID = 1;
 let poll = -1;
 
 //try to join room
-fetch(`${url}/api/Game/Play/StartGame/1`, {
+fetch(`${url}/api/Game/Play/StartGame/${currID}`, {
   method: 'POST',
   headers: {
     'Content-Type': 'text/plain',
@@ -88,7 +88,7 @@ function leaveRoom() {}
 
 //requests an updated game state from the server
 function requestGameUpdate() {
-  fetch(`${url}/api/Game/1`)
+  fetch(`${url}/api/Game/${currID}`)
     .then((response) => {
       response.json();
     })
@@ -175,10 +175,10 @@ function statusUpdate(game) {
     statElem.classList.add('redWin');
     clearInterval(poll);
 
-    //delete game
+    //reset game
     if (currPlayer === 'black') {
-      fetch(`${url}/api/Game/1`, {
-        method: 'DELETE',
+      fetch(`${url}/api/Game/Play/ResetGame/${currID}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'text/plain',
         }
@@ -199,10 +199,10 @@ function statusUpdate(game) {
     statElem.classList.add('blackWin');
     clearInterval(poll);
 
-    //delete game
+    //reset game
     if (currPlayer === 'red') {
-      fetch(`${url}/api/Game/1`, {
-        method: 'DELETE',
+      fetch(`${url}/api/Game/Play/ResetGame/${currID}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'text/plain',
         }
@@ -235,7 +235,7 @@ function sendMove(column) {
 
  
 
-  fetch(`${url}/api/Game/Play/${currPlayer}/Column/${column}?id=1`, {
+  fetch(`${url}/api/Game/Play/${currPlayer}/Column/${column}?id=${currID}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
