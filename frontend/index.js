@@ -10,6 +10,8 @@ let currPlayer = 'none';
 let currID = 1;
 let poll = -1;
 
+poll = setInterval(requestGameUpdate, 5000);
+console.log(poll)
 //try to join room
 fetch(`${url}/api/Game/Play/StartGame`, {
   method: 'POST',
@@ -24,7 +26,6 @@ fetch(`${url}/api/Game/Play/StartGame`, {
     assignPlayer(data.playerType);
     updateGame(data);
     //poll server every 5 seconds
-    poll = setInterval(requestGameUpdate, 5000);
   })
   .catch((error) => {
     console.error('Something went wrong when joining the game: ', error);
