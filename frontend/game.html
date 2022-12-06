@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <header>Connect 4</header>
+    
+    <section class="container">
+
+      <nav>
+        <ul>
+          <li>
+            <a href="game.html">Home</a>
+          </li>
+          <li>
+            <a href="credits.html">Credits</a>
+          </li>
+        </ul>
+      </nav>
+      
+      <section id="gamescreen">
+
+        <div>
+            <p id="player"></p>
+            <p id="status"></p>
+        </div>
+
+        <table>
+            <!--Table Header used for column indicator-->
+            <thead>
+              <tr>
+                <th id="col1"></th>
+                <th id="col2"></th>
+                <th id="col3"></th>
+                <th id="col4"></th>
+                <th id="col5"></th>
+                <th id="col6"></th>
+                <th id="col7"></th>
+              </tr>
+            </thead>
+            <!--Gameboard; Each square has an id in the format "<row>x<column>"-->
+            <tbody>
+              <tr>
+                <td id="1x1"></td>
+                <td id="1x2"></td>
+                <td id="1x3"></td>
+                <td id="1x4"></td>
+                <td id="1x5"></td>
+                <td id="1x6"></td>
+                <td id="1x7"></td>
+              </tr>
+              <tr>
+                <td id="2x1"></td>
+                <td id="2x2"></td>
+                <td id="2x3"></td>
+                <td id="2x4"></td>
+                <td id="2x5"></td>
+                <td id="2x6"></td>
+                <td id="2x7"></td>
+              </tr>
+              <tr>
+                <td id="3x1"></td>
+                <td id="3x2"></td>
+                <td id="3x3"></td>
+                <td id="3x4"></td>
+                <td id="3x5"></td>
+                <td id="3x6"></td>
+                <td id="3x7"></td>
+              </tr>
+              <tr>
+                <td id="4x1"></td>
+                <td id="4x2"></td>
+                <td id="4x3"></td>
+                <td id="4x4"></td>
+                <td id="4x5"></td>
+                <td id="4x6"></td>
+                <td id="4x7"></td>
+              </tr>
+              <tr>
+                <td id="5x1"></td>
+                <td id="5x2"></td>
+                <td id="5x3"></td>
+                <td id="5x4"></td>
+                <td id="5x5"></td>
+                <td id="5x6"></td>
+                <td id="5x7"></td>
+              </tr>
+              <tr>
+                <td id="6x1"></td>
+                <td id="6x2"></td>
+                <td id="6x3"></td>
+                <td id="6x4"></td>
+                <td id="6x5"></td>
+                <td id="6x6" class="red"></td>
+                <td id="6x7" class="black"></td>
+              </tr>
+            </tbody>
+            </table>
+
+            <div id="help">
+              <p>
+                When it's your turn, click on a column to place a piece of your color there.
+              </p>
+              <p>
+                The first player to get four pieces of their color in a line horizontally, vertically, or diagonally wins.
+              </p>
+            </div>
+      </section>
+    </section>
+  </body>
+
+  <script defer src="index.js"></script>
+</html>
